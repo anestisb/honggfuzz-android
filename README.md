@@ -18,6 +18,9 @@ Pay extra attention to the number of parallel tasks based on your hardware & fuz
 * adb push libs/armeabi/honggfuzz to your device
 * Have fun :)
 
+
+A sample (MD5:418745107f28a6d7a1cc05de6d147472) ARM EABI5 executable is also included in the bin directory.
+
 ## License
 ```
    honggfuzz Android port
