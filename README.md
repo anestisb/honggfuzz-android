@@ -20,7 +20,7 @@ Pay extra attention to the number of parallel tasks based on your hardware & fuz
 * Have fun :)
 
 
-A sample (MD5:418745107f28a6d7a1cc05de6d147472) ARM EABI5 executable is also included in the bin directory.
+Two sample (PIE-MD5:418745107f28a6d7a1cc05de6d147472, noPIE-MD5; 3e0493b5282036fd8a9bcb38aa3389f9]) ARM EABI5 executables are included in the bin directory for convenience.
 
 ## License
 ```
