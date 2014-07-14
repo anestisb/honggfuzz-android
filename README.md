@@ -20,7 +20,7 @@ Pay extra attention to the number of parallel tasks based on your hardware & fuz
 
 ## License
 ```
-   honggfuzz Android - Makefile
+   honggfuzz Android port
    -----------------------------------------
 
    Author:        Robert Swiecki <swiecki@google.com>
