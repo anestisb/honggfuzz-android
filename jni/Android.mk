@@ -19,6 +19,9 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+# Change to false if target API is < 16 (4.1 JellyBean)
+TARGET_IS_PIE = true
+
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -27,7 +30,12 @@ LOCAL_SRC_FILES := honggfuzz.c log.c files.c fuzz.c util.c arch_posix.c
 LOCAL_CFLAGS    := -O3 -g -ggdb -c -std=c99 -I. -D_GNU_SOURCE \
 	           -Wall -Werror -Wimplicit -Wunused -Wcomment \
                    -Wchar-subscripts -Wuninitialized -Wcast-align \
-	           -Wreturn-type -Wpointer-arith -fPIE
-LOCAL_LDFLAGS   := -fPIE -pie -lm
+	           -Wreturn-type -Wpointer-arith
+LOCAL_LDFLAGS   := -lm
+
+ifeq ($(TARGET_IS_PIE),true)
+  LOCAL_CFLAGS += -fPIE
+  LOCAL_LDFLAGS += -fPIE -pie
+endif
 
 include $(BUILD_EXECUTABLE)

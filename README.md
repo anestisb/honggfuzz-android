@@ -14,6 +14,7 @@ Pay extra attention to the number of parallel tasks based on your hardware & fuz
 
 * Install Android NDK from official [source](https://developer.android.com/tools/sdk/ndk/index.html) (prefer latest version).
 * Tweak system path to include NDK root, build/tools & prebuilt/<target>/bin
+* If compiling for devices < API 16 (4.1 JellyBean), disable PIE in jni/Android.mk:TARGET_IS_PIE
 * Invoke ndk-build in repo root path
 * adb push libs/armeabi/honggfuzz to your device
 * Have fun :)
