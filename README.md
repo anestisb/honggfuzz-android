@@ -20,7 +20,10 @@ Pay extra attention to the number of parallel tasks based on your hardware & fuz
 * Have fun :)
 
 
-Two sample (PIE-MD5:418745107f28a6d7a1cc05de6d147472, noPIE-MD5; 3e0493b5282036fd8a9bcb38aa3389f9]) ARM EABI5 executables are included in the bin directory for convenience.
+Two sample ARM EABI5 executables are included in the bin directory for convenience.
+
+* MD5 (bin/honggfuzz_PIE) = 1892a15ab0ebcb09412988b3ed3ea3c2
+* MD5 (bin/honggfuzz_noPIE) = c699c8ef22b094faedd332cd3fca4e18
 
 ## License
 ```

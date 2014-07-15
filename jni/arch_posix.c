@@ -134,10 +134,17 @@ bool arch_launchChild(honggfuzz_t * hfuzz, char *fileName)
     char *args[ARGS_MAX + 2];
 
     int x;
+    char *pCurArg = NULL;
+    char argData[PATH_MAX] = { 0 };
 
     for (x = 0; x < ARGS_MAX && hfuzz->cmdline[x]; x++) {
-        if (!hfuzz->fuzzStdin && strcmp(hfuzz->cmdline[x], FILE_PLACEHOLDER) == 0) {
+        pCurArg = hfuzz->cmdline[x];
+        if (!hfuzz->fuzzStdin && strcmp(pCurArg, FILE_PLACEHOLDER) == 0) {
             args[x] = fileName;
+        } else if (!hfuzz->fuzzStdin && strstr(pCurArg, CON_FILE_PLACEHOLDER) != NULL) {
+            const char *off = strstr(hfuzz->cmdline[x], CON_FILE_PLACEHOLDER);
+            snprintf(argData, PATH_MAX, "%.*s=%s", (off - pCurArg), pCurArg, fileName);
+            args[x] = argData;
         } else {
             args[x] = hfuzz->cmdline[x];
         }

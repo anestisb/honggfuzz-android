@@ -32,9 +32,11 @@
 
 #define PROG_NAME "honggfuzz"
 #define PROG_VERSION "0.3"
-#define PROG_AUTHORS "Robert Swiecki <swiecki@google.com>, Copyright 2010 by Google Inc. All Rights Reserved."
+#define PROG_AUTHORS "Robert Swiecki <swiecki@google.com>, Copyright 2010 by Google Inc. All Rights Reserved.\n" \
+                     "Anestis Bechtsoudis <anestis@census-labs.com>, Copyright 2014 by Census SA. All Rights Reserved."
 
 #define FILE_PLACEHOLDER "___FILE___"
+#define CON_FILE_PLACEHOLDER "=___FILE___"
 
 typedef struct {
     char **cmdline;

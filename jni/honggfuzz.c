@@ -45,6 +45,8 @@ static bool checkFor_FILE_PLACEHOLDER(char **args)
     for (int x = 0; args[x]; x++) {
         if (!strcmp(args[x], FILE_PLACEHOLDER))
             return true;
+        if (strstr(args[x], CON_FILE_PLACEHOLDER))
+            return true;
     }
     return false;
 }
