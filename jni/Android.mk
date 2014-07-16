@@ -36,6 +36,13 @@ LOCAL_LDFLAGS   := -lm
 ifeq ($(TARGET_IS_PIE),true)
   LOCAL_CFLAGS += -fPIE
   LOCAL_LDFLAGS += -fPIE -pie
+  BIN_SUFFIX := _PIE
+else
+  BIN_SUFFIX := _noPIE
 endif
 
 include $(BUILD_EXECUTABLE)
+
+all:POST_BUILD_EVENT
+POST_BUILD_EVENT:
+	cp libs/armeabi/honggfuzz bin/honggfuzz$(BIN_SUFFIX)
