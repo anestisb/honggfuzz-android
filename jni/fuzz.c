@@ -62,8 +62,11 @@ static void fuzz_mangleContent(honggfuzz_t * hfuzz, uint8_t * buf, off_t fileSz)
 
     changesCnt = util_rndGet(1, changesCnt);
 
+    uint32_t start = hfuzz->fuzzStart;
+    uint32_t end = (hfuzz->fuzzEnd == UINT_MAX) ? fileSz : hfuzz->fuzzEnd;
+
     for (uint64_t x = 0; x < changesCnt; x++) {
-        off_t pos = util_rndGet(0, fileSz - 1);
+        off_t pos = util_rndGet(start, end - 1);
 
         if (hfuzz->flipMode == 'b') {
             buf[pos] ^= (1 << util_rndGet(0, 7));

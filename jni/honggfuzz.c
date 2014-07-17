@@ -56,24 +56,25 @@ static void usage(void
 {
     printf("%s",
            " <" AB "-f val" AC ">: input file (or input dir)\n"
-           " [" AB "-h" AC "]: this help\n"
-           " [" AB "-q" AC "]: null-ify children's stdin, stdout, stderr; make them quiet\n"
-           " [" AB "-s" AC "]: standard input fuzz, instead of providing a file argument\n"
-           " [" AB "-u" AC "]: save unique test-cases only, otherwise (if not used) append\n"
-           "       current timestamp to the output filenames\n"
-           " [" AB "-d val" AC "]: debug level (0 - FATAL ... 4 - DEBUG), default: '" AB "3" AC
-           "' (INFO)\n" " [" AB "-e val" AC "]: file extension (e.g swf), default: '" AB "fuzz" AC
-           "'\n" " [" AB "-r val" AC "]: flip rate, default: '" AB "0.001" AC "'\n" " [" AB "-m val"
-           AC "]: flip mode (-mB - byte, -mb - bit), default: '" AB "-mB" AC "'\n" " [" AB "-c val"
-           AC "]: command modifying input files externally (instead of -r/-m)\n" " [" AB "-t val" AC
-           "]: timeout (in secs), default: '" AB "3" AC "' (0 - no timeout)\n" " [" AB "-a val" AC
-           "]: address limit (from si.si_addr) below which crashes\n"
-           "           are not reported, default: '" AB "0" AC "' (suggested: 65535)\n" " [" AB
-           "-n val" AC "]: number of concurrent fuzzing processes, default: '" AB "5" AC "'\n" " [-"
-           AB "l val" AC "]: per process memory limit in MiB, default: '" AB "0" AC "' (no limit)\n"
+           " [" AB "-h" AC "]    : this help\n"
+           " [" AB "-q" AC "]    : null-ify children's stdin, stdout, stderr; make them quiet\n"
+           " [" AB "-s" AC "]    : standard input fuzz, instead of providing a file argument\n"
+           " [" AB "-u" AC "]    : save unique test-cases only, otherwise (if not used) append\n"
+           "           current timestamp to the output filenames\n"
+           " [" AB "-d val" AC "]: debug level (0 - FATAL ... 4 - DEBUG), default: '" AB "3" AC "' (INFO)\n" 
+           " [" AB "-e val" AC "]: file extension (e.g swf), default: '" AB "fuzz" AC "'\n" 
+           " [" AB "-r val" AC "]: flip rate, default: '" AB "0.001" AC "'\n" 
+           " [" AB "-m val" AC "]: flip mode (-mB - byte, -mb - bit), default: '" AB "-mB" AC "'\n"
+           " [" AB "-b val" AC "]: mangling range start offset from file begin (default: '" AB "0" AC "' Begin)\n"
+           " [" AB "-w val" AC "]: mangling range end offset from file begin (default: '" AB "UINT_MAX" AC "' EOF)\n"
+           " [" AB "-c val" AC "]: command modifying input files externally (instead of -r/-m)\n" 
+           " [" AB "-t val" AC "]: timeout (in secs), default: '" AB "3" AC "' (0 - no timeout)\n" 
+           " [" AB "-a val" AC "]: address limit (from si.si_addr) below which crashes\n"
+           "           are not reported, default: '" AB "0" AC "' (suggested: 65535)\n" 
+           " [" AB "-n val" AC "]: number of concurrent fuzzing processes, default: '" AB "5" AC "'\n" 
+           " [" AB "-l val" AC "]: per process memory limit in MiB, default: '" AB "0" AC "' (no limit)\n"
 #ifdef _HAVE_ARCH_PTRACE
-           " [" AB "-p val" AC
-           "]: attach to a pid (a group thread), instead of monitoring\n"
+           " [" AB "-p val" AC "]: attach to a pid (a group thread), instead of monitoring\n"
            "           previously created process, default: '" AB "0" AC "' (none)\n"
 #endif                          /* _HAVE_ARCH_PTRACE */
            "usage:"
@@ -94,6 +95,8 @@ int main(int argc, char **argv)
     hfuzz.fileExtn = "fuzz";
     hfuzz.flipRate = 0.001f;
     hfuzz.flipMode = 'B';
+    hfuzz.fuzzStart = 0;
+    hfuzz.fuzzEnd = UINT_MAX;
     hfuzz.externalCommand = NULL;
     hfuzz.tmOut = 3;
     hfuzz.ignoreAddr = (void *)0UL;
@@ -105,14 +108,14 @@ int main(int argc, char **argv)
     hfuzz.files = NULL;
     hfuzz.threadsCnt = 0;
 
-    printf(AB PROG_NAME " version " PROG_VERSION " " PROG_AUTHORS AC "\n");
+    printf(AB PROG_NAME " version " PROG_VERSION "\n" PROG_AUTHORS AC "\n");
     if (argc < 2) {
         usage();
         exit(EXIT_SUCCESS);
     }
 
     for (;;) {
-        c = getopt(argc, argv, "hqsuf:d:e:r:m:c:t:a:n:l:p:");
+        c = getopt(argc, argv, "hqsuf:d:e:r:m:c:t:a:n:l:p:b:w:");
         if (c < 0)
             break;
 
@@ -162,6 +165,12 @@ int main(int argc, char **argv)
         case 'p':
             hfuzz.pid = atoi(optarg);
             break;
+        case 'b':
+            hfuzz.fuzzStart = strtoul(optarg, NULL, 10);
+            break;
+        case 'w':
+            hfuzz.fuzzEnd = strtoul(optarg, NULL, 10);
+            break;
         default:
             break;
         }
@@ -190,6 +199,11 @@ int main(int argc, char **argv)
 
     if (strchr(hfuzz.fileExtn, '/')) {
         LOGMSG(l_FATAL, "The file extension contains the '/' character: '%s'", hfuzz.fileExtn);
+        usage();
+    }
+
+    if (hfuzz.fuzzStart > hfuzz.fuzzEnd || hfuzz.fuzzStart == hfuzz.fuzzEnd) {
+        LOGMSG(l_FATAL, "Invalid mangle fuzz area file offsets");
         usage();
     }
 

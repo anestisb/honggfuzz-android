@@ -31,7 +31,7 @@
 #include <limits.h>
 
 #define PROG_NAME "honggfuzz"
-#define PROG_VERSION "0.3"
+#define PROG_VERSION "0.3.1"
 #define PROG_AUTHORS "Robert Swiecki <swiecki@google.com>, Copyright 2010 by Google Inc. All Rights Reserved.\n" \
                      "Anestis Bechtsoudis <anestis@census-labs.com>, Copyright 2014 by Census SA. All Rights Reserved."
 
@@ -47,6 +47,8 @@ typedef struct {
     char *fileExtn;
     double flipRate;
     char flipMode;
+    uint32_t fuzzStart;
+    uint32_t fuzzEnd;
     char *externalCommand;
     long tmOut;
     long threadsMax;

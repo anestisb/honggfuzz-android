@@ -10,11 +10,21 @@ POSIX/SIGNAL architecture has been chosen in order to be compatible with most of
 
 Pay extra attention to the number of parallel tasks based on your hardware & fuzzing target.
 
+## ChangeLog
+
+### version 3.1 (17 July 2014)
+* Add support for fuzz mangle area offsets relative to file begin pos for internal data generator
+* Add support for `--<arg>=___FILE___` type of arguments in fuzz target
+
+### version 3.0 (14 July 2014)
+* Initial port from original repo
+* Edits in arch-posix.c to support Android NDK builds
+
 ## Building
 
 * Install Android NDK from official [source](https://developer.android.com/tools/sdk/ndk/index.html) (prefer latest version).
-* Tweak system path to include NDK root, build/tools & prebuilt/<target>/bin
-* If compiling for devices < API 16 (4.1 JellyBean), disable PIE in jni/Android.mk:TARGET_IS_PIE
+* Tweak system path to include NDK root, `build/tools` & `prebuilt/<target>/bin`
+* If compiling for devices < API 16 (4.1 JellyBean), disable PIE in `jni/Android.mk:TARGET_IS_PIE`
 * Invoke ndk-build in repo root path
 * adb push libs/armeabi/honggfuzz to your device
 * Have fun :)
@@ -22,8 +32,8 @@ Pay extra attention to the number of parallel tasks based on your hardware & fuz
 
 Two sample ARM EABI5 executables are included in the bin directory for convenience.
 
-* MD5 (bin/honggfuzz_PIE) = 1892a15ab0ebcb09412988b3ed3ea3c2
-* MD5 (bin/honggfuzz_noPIE) = c699c8ef22b094faedd332cd3fca4e18
+* `MD5 (bin/honggfuzz_PIE) = c571be57dc2d94d3eefe058faaf313da`
+* `MD5 (bin/honggfuzz_noPIE) = 13fba34bbad32a2bfd13af84f835eb84`
 
 ## License
 ```
