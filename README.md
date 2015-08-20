@@ -1,6 +1,8 @@
 honggfuzz android
 =================
 
+**!!! Project is deprecated. Use [upstream mirror](https://github.com/anestisb/honggfuzz) instead.**
+
 An Android port of the [honggfuzz](https://code.google.com/p/honggfuzz/) general purpose fuzzer tool.
 
 ## General Info
